@@ -1,6 +1,7 @@
 # SONATA qual-stress-catalogues
+Documentation of the qualification tests are found in SONATA wiki, following the link to [Catalogue and Repositories Qualification tests](http://wiki.sonata-nfv.eu/index.php/Catalogues_and_Repositories_Qualification_Tests)
 <ul>
-<li></li>
+<li>Work in progress...</li>
 </ul>
 
 ## Contributing to this repository
