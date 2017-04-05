@@ -1,15 +1,14 @@
 descriptor_version: "vnfd-schema-01"
 vendor: "eu.sonata-nfv"
-name: "vtc-vnf"
+name: "vBar-vnf"
 version: "0.1"
-author: "George Xilouris, NCSRD"
+author: "Dario Valocchi, UCL"
 description: >
-  "Virtual traffic classifier (vTC) descriptor file. vTC uses ndpi library for the implementation of the vTC"
-
+  "Virtual Bar (vBar) descriptor file. vBar uses vTC to forward and inspect/classify traffic and a dummy backend to serve drinks"
 
 virtual_deployment_units:
   - id: "vdu01"
-    description: "VNFC for the dashboard and the time-series database"
+    description: "1st VNFC, acting as front end and traffic forwarder"
     vm_image: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
     vm_image_format: "qcow2"
     resource_requirements:
@@ -37,12 +36,42 @@ virtual_deployment_units:
         type: "internal"
       - id: "vdu01:eth2"
         type: "internal"
+      - id: "vdu01:eth3"
+        type: "internal"
+  - id: "vdu02"
+    description: "2nd VDU, acting as a backend"
+    vm_image: "http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img"
+    vm_image_format: "qcow2"
+    resource_requirements:
+      cpu:
+        vcpus: 1
+      memory:
+        size: 2
+        size_unit: "GB"
+      storage:
+        size: 20
+        size_unit: "GB"
+    monitoring_parameters:
+      - name: "vm_cpu_perc"
+        unit: "Percentage"
+      - name: "vm_mem_pers"
+        unit: "Percentage"
+      - name: "vm_net_rx_MB"
+        unit: "MB"
+      - name: "vm_net_tx_MB"
+        unit: "Mbps"
+    connection_points:
+      - id: "vdu02:eth0"
+        type: "public"
+      - id: "vdu02:eth1"
+        type: "internal"
 
 virtual_links:
   - id: "mgmt"
     connectivity_type: "E-LAN"
     connection_points_reference:
       - "vdu01:eth0"
+      - "vdu02:eth0"
       - "vnf:mgmt"
     dhcp: True
   - id: "input"
@@ -56,6 +85,12 @@ virtual_links:
     connection_points_reference:
       - "vdu01:eth2"
       - "vnf:output"
+    dhcp: True
+  - id: "front-back"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vdu01:eth3"
+      - "vdu02:eth1"
     dhcp: True
 
 connection_points:
@@ -97,3 +132,4 @@ monitoring_rules:
     notification:
       - name: "notification04"
         type: "rabbitmq_message"
+

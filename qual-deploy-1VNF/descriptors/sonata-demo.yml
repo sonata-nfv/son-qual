@@ -52,7 +52,7 @@ virtual_links:
     connection_points_reference:
       - "ns:input"
       - "vnf_vtc:input"
-  - id: "vFoo-2-out"
+  - id: "vtc-2-out"
     connectivity_type: "E-Line"
     connection_points_reference:
       - "vnf_vtc:output"

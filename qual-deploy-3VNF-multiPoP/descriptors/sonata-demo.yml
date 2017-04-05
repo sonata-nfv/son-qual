@@ -9,11 +9,11 @@
 descriptor_version: "2.0"
 
 vendor: "eu.sonata-nfv.service-descriptor"
-name: "sonata-qual-2"
+name: "sonata-qual-3"
 version: "0.1"
 author: "Dario Valocchi,University College London"
 description: >
-  "The network service descriptor for qualification test, composed by 2 VNF. A Virtual Traffic Classifier, and a vFoo (1 VDU)"
+  "The network service descriptor for qualification test, composed by 3 VNF. A Virtual Traffic Classifier, a vFoo(1 VDU) and vBar(2 VDUs)"
 
 ##
 ## The various network functions this service
@@ -27,6 +27,10 @@ network_functions:
   - vnf_id: "vnf_vFoo"
     vnf_vendor: "eu.sonata-nfv"
     vnf_name: "vtc-vFoo"
+    vnf_version: "0.1"
+  - vnf_id: "vnf_vBar"
+    vnf_vendor: "eu.sonata-nfv"
+    vnf_name: "vtc-vBar"
     vnf_version: "0.1"
 
 ##
@@ -51,6 +55,7 @@ virtual_links:
     connection_points_reference:
       - "vnf_vtc:mgmt"
       - "vnf_vFoo:mgmt"
+      - "vnf_vBar:mgmt"
       - "ns:mgmt"
   - id: "input-2-vtc"
     connectivity_type: "E-Line"
@@ -61,11 +66,16 @@ virtual_links:
     connectivity_type: "E-Line"
     connection_points_reference:
       - "vnf_vtc:output"
-      - "vnf_vFoo:infput"
-  - id: "vFoo-2-out"
+      - "vFoo:infput"
+  - id: "vBar-2-vBar"
     connectivity_type: "E-Line"
     connection_points_reference:
       - "vnf_vFoo:output"
+      - "vnf_vBar:infput"
+  - id: "vBar-2-out"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vnf_vBar:output"
       - "ns:output"
 
 ##
@@ -93,5 +103,9 @@ forwarding_graphs:
             position: 4
           - connection_point_ref: "vnf_vFoo:output"
             position: 5
-          - connection_point_ref: "ns:output"
+          - connection_point_ref: "vnf_vBar:input"
             position: 6
+          - connection_point_ref: "vnf_vBar:output"
+            position: 7
+          - connection_point_ref: "ns:output"
+            position: 8
