@@ -39,4 +39,6 @@ wait_for_web $target:27017/ 200
 echo "Waiting for $target:4002"
 wait_for_web $target:4002/ 200
 
+echo
+
 export DOCKER_HOST="unix:///var/run/docker.sock"

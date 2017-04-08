@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+"""son-package catalogues stress tests"""
 
 # Work in progress...
 
@@ -6,22 +8,28 @@ import requests
 import uuid
 import yaml
 import time
+import sys
 
-def send_file(package_file):
-    url = "http://sp.int3.sonata-nfv.eu:4002/catalogues/api/v2/son-packages"
-    data = package_file
-    headers = {
-        'content-type': "application/zip",
-        'content-disposition': "attachment; filename=" + str(uuid.uuid4()),
-    }
-    r = requests.post(url, data=package_file, headers=headers)
-    print(r.status_code)
+TARGET = 'http://sp.int3.sonata-nfv.eu'
 
-    # if r.status_code != '201'
-        # test fails!
+def send_file(package_filename):
+    """Sends package filename"""
+    url = '{0}:4002/catalogues/api/v2/son-packages'.format(TARGET)
+    with open(package_filename, 'rb') as fhandle:
+        data = fhandle.read()
+        headers = {
+            'content-type': 'application/zip',
+            'content-disposition':
+            'attachment; filename={0}'.format(uuid.uuid4())
+        }
+        resp = requests.post(url, data=data, headers=headers)
+    print resp.status_code
 
-with open("resources/sonata-demo.son", mode='rb') as file:
+if __name__ == '__main__':
+
+    if len(sys.argv) > 1:
+        TARGET = sys.argv[1]
     try:
-        send_file(file)
-    except Exception as e:
-        print(e)
+        send_file('./qual-stress-catalogues/resources/sonata-demo.son')
+    except Exception as sende:
+        print sende
