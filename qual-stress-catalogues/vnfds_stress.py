@@ -36,15 +36,22 @@ class TestVnfd(StressTest):
         """Sends descriptor"""
         url = '{0}:4002/catalogues/api/v2/vnfs'.format(self._target)
         headers = {'Content-Type': 'application/x-yaml'}
-        resp = requests.post(url, data=yaml.dump(self._entries.pop()), headers=headers)
-        if not resp.status_code in (200,201):
-            print 'Error {0}'.format(resp.status_code)
+        try:
+            resp = requests.post(url, data=yaml.dump(self._entries.pop()), headers=headers)
+            if not resp.status_code in (200,201):
+                print 'Error {0}'.format(resp.status_code)
+                os._exit(1)
+        except Exception as exc:
+            print 'Error {0}'.format(exc)
             os._exit(1)
+
 
 if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         TARGET = sys.argv[1]
     print 'Vnfd stress test'
-    tvnfd = TestVnfd(10, TARGET)
-    tvnfd.run()
+    limits = [10, 100, 1000]
+    for limit in limits:
+        test = TestVnfd(limit, TARGET)
+        test.run()

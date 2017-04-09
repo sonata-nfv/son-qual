@@ -19,7 +19,6 @@ class TestSonPackage(StressTest):
 
     def __init__(self, ntests, target, sample=SON_PACKAGE_SAMPLE):
         super(TestSonPackage, self).__init__(ntests, target)
-        print 'Initialising stress test with {0} entries'.format(ntests)
         self._target = target
         self._entries = []
         self._sample = sample
@@ -37,9 +36,13 @@ class TestSonPackage(StressTest):
             'content-disposition':
             'attachment; filename={0}'.format(uuid.uuid4())
         }
-        resp = requests.post(url, data=self._entries.pop(), headers=headers)
-        if not resp.status_code in (200,201):
-            print 'Error {0}'.format(resp.status_code)
+        try:
+            resp = requests.post(url, data=self._entries.pop(), headers=headers)
+            if not resp.status_code in (200,201):
+                print 'Error {0}'.format(resp.status_code)
+                os._exit(1)
+        except Exception as exc:
+            print 'Error {0}'.format(exc)
             os._exit(1)
 
 
@@ -48,5 +51,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         TARGET = sys.argv[1]
     print 'Son-packages stress test'
-    sp = TestSonPackage(10, TARGET)
-    sp.run()
+    limits = [10, 100, 1000]
+    for limit in limits:
+        test = TestSonPackage(limit, TARGET)
+        test.run()

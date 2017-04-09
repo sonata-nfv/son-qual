@@ -21,3 +21,9 @@ if [[ $status_code != 20* ]] ;
     exit -1
 fi
 echo "Success: Catalogue and Repositories found"
+
+echo 'Starting qualification Tests'
+bash qual-stress-catalogues/tests1.sh $1
+bash qual-stress-catalogues/tests2.sh $1
+bash qual-stress-catalogues/tests3.sh $1
+bash qual-stress-catalogues/tests4.sh $1
