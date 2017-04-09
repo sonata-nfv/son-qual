@@ -9,11 +9,12 @@ function wait_for_web() {
     until [ $(curl --connect-timeout 15 --max-time 15 -k -s -o /dev/null -w "%{http_code}" $1) -eq $2 ]; do
 	sleep 2 && 	echo -n .;
 	let retries="$retries+1"
-	if [ $retries -eq 12 ]; then
+	if [ $retries -eq 24 ]; then
 	    echo "Timeout waiting for $2 status on $1"
 	    exit 1
 	fi
     done
+    echo
 }
 
 containers=(son-catalogue-repos
