@@ -1,0 +1,43 @@
+son-catalogue-repos:
+  image: registry.sonata-nfv.eu:5000/son-catalogue-repos
+  links:
+   - mongo
+  ports:
+    - "4002:4011"
+  restart: always
+  container_name: son-catalogue-repos
+
+son-catalogue-repos-doc:
+  image: registry.sonata-nfv.eu:5000/son-catalogue-repos
+  ports:
+    - "8800:8808"
+  command: [rake,yard]
+  command: [yard, server, -B, 0.0.0.0]
+  restart: always
+  container_name: son-catalogue-repos-doc
+
+mongodata:  
+  image: mongo:3.0.4
+  volumes:
+    - /data/db
+  command: --break-mongo
+  container_name: mongodata
+
+mongo:  
+  image: mongo:3.0.4
+  volumes_from:
+    - mongodata
+  ports:
+    - "27017:27017"
+  command: --smallfiles --rest
+  restart: always
+  container_name: mongo
+
+mongoexpress:
+  image: mongo-express
+  links:
+    - mongo:mongo
+  ports:
+    - "8090:8081"
+  restart: always
+  container_name: mongoexpress
