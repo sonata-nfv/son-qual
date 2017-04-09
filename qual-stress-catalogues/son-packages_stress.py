@@ -22,12 +22,12 @@ class TestSonPackage(StressTest):
         self._target = target
         self._entries = []
         self._sample = sample
+        with open(self._sample, 'rb') as fhandle:
+            self._sample_entry = fhandle.read()
 
     def populate(self):
         for i in range(0,self._ntests):
-            with open(self._sample, 'rb') as fhandle:
-                data = fhandle.read()
-                self._entries.append(data)
+            self._entries.append(self._sample_entry)
 
     def send(self):
         url = '{0}:4002/catalogues/api/v2/son-packages'.format(self._target)
@@ -37,8 +37,8 @@ class TestSonPackage(StressTest):
             'attachment; filename={0}'.format(uuid.uuid4())
         }
         try:
-            resp = requests.post(url, data=self._entries.pop(), headers=headers)
-            if not resp.status_code in (200,201):
+            resp = requests.post(url, data=self._entries.pop(), headers=headers, timeout=10)
+            if not resp.status_code in (200, 201):
                 print 'Error {0}'.format(resp.status_code)
                 os._exit(1)
         except Exception as exc:
