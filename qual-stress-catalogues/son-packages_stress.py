@@ -37,6 +37,7 @@ class TestSonPackage(StressTest):
             'attachment; filename={0}'.format(uuid.uuid4())
         }
         try:
+            # http://stackoverflow.com/questions/6319207/are-lists-thread-safe
             resp = requests.post(url, data=self._entries.pop(), headers=headers, timeout=10)
             if not resp.status_code in (200, 201):
                 print 'Error {0}'.format(resp.status_code)

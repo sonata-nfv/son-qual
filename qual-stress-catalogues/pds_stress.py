@@ -37,6 +37,7 @@ class TestPd(StressTest):
         url = '{0}:4002/catalogues//api/v2/packages'.format(self._target)
         headers = {'Content-Type': 'application/x-yaml'}
         try:
+            # http://stackoverflow.com/questions/6319207/are-lists-thread-safe
             resp = requests.post(url, data=yaml.dump(self._entries.pop()), headers=headers, timeout=10)
             if not resp.status_code in (200, 201):
                 print 'Error {0}'.format(resp.status_code)
