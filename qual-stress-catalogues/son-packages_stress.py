@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""son-package catalogues stress tests"""
 
 # Work in progress...
 
@@ -6,22 +8,51 @@ import requests
 import uuid
 import yaml
 import time
+import sys, os
+from stress_test import StressTest
 
-def send_file(package_file):
-    url = "http://sp.int3.sonata-nfv.eu:4002/catalogues/api/v2/son-packages"
-    data = package_file
-    headers = {
-        'content-type': "application/zip",
-        'content-disposition': "attachment; filename=" + str(uuid.uuid4()),
-    }
-    r = requests.post(url, data=package_file, headers=headers)
-    print(r.status_code)
+TARGET = 'http://sp.int3.sonata-nfv.eu'
+SON_PACKAGE_SAMPLE = './qual-stress-catalogues/resources/sonata-demo.son'
 
-    # if r.status_code != '201'
-        # test fails!
+class TestSonPackage(StressTest):
+    """son-package class"""
 
-with open("resources/sonata-demo.son", mode='rb') as file:
-    try:
-        send_file(file)
-    except Exception as e:
-        print(e)
+    def __init__(self, ntests, target, sample=SON_PACKAGE_SAMPLE):
+        super(TestSonPackage, self).__init__(ntests, target)
+        self._target = target
+        self._entries = []
+        self._sample = sample
+        with open(self._sample, 'rb') as fhandle:
+            self._sample_entry = fhandle.read()
+
+    def populate(self):
+        for i in range(0,self._ntests):
+            self._entries.append(self._sample_entry)
+
+    def send(self):
+        url = '{0}:4002/catalogues/api/v2/son-packages'.format(self._target)
+        headers = {
+            'content-type': 'application/zip',
+            'content-disposition':
+            'attachment; filename={0}'.format(uuid.uuid4())
+        }
+        try:
+            # http://stackoverflow.com/questions/6319207/are-lists-thread-safe
+            resp = requests.post(url, data=self._entries.pop(), headers=headers, timeout=10)
+            if not resp.status_code in (200, 201):
+                print 'Error {0}'.format(resp.status_code)
+                os._exit(1)
+        except Exception as exc:
+            print 'Error {0}'.format(exc)
+            os._exit(1)
+
+
+if __name__ == '__main__':
+
+    if len(sys.argv) > 1:
+        TARGET = sys.argv[1]
+    print 'Son-packages stress test'
+    limits = [10, 100, 1000]
+    for limit in limits:
+        test = TestSonPackage(limit, TARGET)
+        test.run()
