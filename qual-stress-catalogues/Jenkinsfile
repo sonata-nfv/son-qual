@@ -10,32 +10,32 @@ node {
 
        stage 'Deploy and Clean Database'
             echo 'Deployment'			
-			sh 'qual-stress-catalogue-repos/deployment.sh'
+			sh 'qual-stress-catalogues/deployment.sh'
        
        stage 'Check catalogue-repos API is UP'
             echo 'Check catalogue-repos API is UP'
-            sh 'qual-stress-catalogue-repos/tests.sh'
+            sh 'qual-stress-catalogues/tests.sh'
 
        stage 'Test1: Stress son-package files API'
             echo 'Stress son-package files API'
-            sh 'qual-stress-catalogue-repos/tests1.sh'
+            sh 'qual-stress-catalogues/tests1.sh'
 
        stage 'Test2: Stress NSD API'
             echo 'Stress NSD API'
-            sh 'qual-stress-catalogue-repos/tests2.sh'
+            sh 'qual-stress-catalogues/tests2.sh'
 
        stage 'Test3: Stress VNFD API'
             echo 'Stress VNFD API'
-            sh 'qual-stress-catalogue-repos/tests3.sh'
+            sh 'qual-stress-catalogues/tests3.sh'
 
        stage 'Test4: Stress PD API'
             echo 'Stress PD API'
-            sh 'qual-stress-catalogue-repos/tests4.sh'
+            sh 'qual-stress-catalogues/tests4.sh'
 
        stage 'Notifications'
             echo 'Sending mails'
 
-            mail body: 'qual-stress-catalogue-repos project build successful',
+            mail body: 'qual-stress-catalogues project build successful',
                         from: 'sonata-nfv@gmail.com',
                         replyTo: 'sonata-nfv@gmail.com',
                         subject: 'project build successful',
@@ -46,7 +46,7 @@ node {
     catch (caughtError) {
         err = caughtError
         currentBuild.result = "FAILURE"
-            mail body: "qual-stress-catalogue-repos project build error: ${err}" ,
+            mail body: "qual-stress-catalogues project build error: ${err}" ,
             from: 'sonata-nfv@gmail.com',
             replyTo: 'sonata-nfv@gmail.com',
             subject: 'project build error',
