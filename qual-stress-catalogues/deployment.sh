@@ -1,9 +1,9 @@
 #!/bin/bash
 ###WORK IN PROGRESS
 #DEPLOYMENT
-# export DOCKER_HOST="tcp://sp.int3.sonata-nfv.eu:2375"
-# target="http://sp.int3.sonata-nfv.eu"
-target="localhost"
+export DOCKER_HOST="tcp://sp.int3.sonata-nfv.eu:2375"
+target="sp.int3.sonata-nfv.eu"
+# target="localhost"
 
 function wait_for_web() {
     until [ $(curl --connect-timeout 15 --max-time 15 -k -s -o /dev/null -w "%{http_code}" $1) -eq $2 ]; do
@@ -19,7 +19,7 @@ function wait_for_web() {
 
 containers=(son-catalogue-repos
     son-catalogue-repos-doc
-    mongodata mongo
+    mongodata son-mongo
     mongoexpress)
 
 for i in ${containers[@]}; do

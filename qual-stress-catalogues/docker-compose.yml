@@ -31,7 +31,7 @@ mongo:
     - "27017:27017"
   command: --smallfiles --rest
   restart: always
-  container_name: mongo
+  container_name: son-mongo
 
 mongoexpress:
   image: mongo-express
