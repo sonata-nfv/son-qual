@@ -1,7 +1,7 @@
 #!/bin/bash
 # Contact Catalogues-DB
-# target="http://sp.int3.sonata-nfv.eu"
-target="localhost"
+target="sp.int3.sonata-nfv.eu"
+# target="localhost"
 
 status_code=$(curl -s -o /dev/null -w "%{http_code}" $target:27017/)
 
