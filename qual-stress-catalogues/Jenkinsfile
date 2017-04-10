@@ -12,23 +12,23 @@ node {
             echo 'Deployment'			
 			sh 'qual-stress-catalogues/deployment.sh'
        
-       stage 'Test: Check catalogue-repos API is UP'
+       stage 'Check catalogue-repos API is UP'
             echo 'Check catalogue-repos API is UP'
             sh 'qual-stress-catalogues/tests.sh'
 
-       stage 'Test 1: Stress son-package files API'
+       stage 'Test1: Stress son-package files API'
             echo 'Stress son-package files API'
             sh 'qual-stress-catalogues/tests1.sh'
 
-       stage 'Test 2: Stress NSD API'
+       stage 'Test2: Stress NSD API'
             echo 'Stress NSD API'
             sh 'qual-stress-catalogues/tests2.sh'
 
-       stage 'Test 3: Stress VNFD API'
+       stage 'Test3: Stress VNFD API'
             echo 'Stress VNFD API'
             sh 'qual-stress-catalogues/tests3.sh'
 
-       stage 'Test 4: Stress PD API'
+       stage 'Test4: Stress PD API'
             echo 'Stress PD API'
             sh 'qual-stress-catalogues/tests4.sh'
 
