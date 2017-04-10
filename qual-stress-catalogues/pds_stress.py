@@ -34,7 +34,7 @@ class TestPd(StressTest):
 
     def send(self):
         """Sends descriptor"""
-        url = '{0}:4002/catalogues//api/v2/packages'.format(self._target)
+        url = '{0}:4002/catalogues/api/v2/packages'.format(self._target)
         headers = {'Content-Type': 'application/x-yaml'}
         try:
             # http://stackoverflow.com/questions/6319207/are-lists-thread-safe
