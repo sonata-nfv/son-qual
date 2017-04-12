@@ -16,6 +16,12 @@ node {
             sh 'qual-stress-monitoring/tests/stress_test.sh 1000 10 http://sp.int3.sonata-nfv.eu:8000/api/v1/users'
             echo 'Send 1000 requests on Concurrency Level 100'
             sh 'qual-stress-monitoring/tests/stress_test.sh 1000 100 http://sp.int3.sonata-nfv.eu:8000/api/v1/users'
+
+        stage 'Stress Mon Manager <-> Prometheus API '
+            echo 'Send 1000 requests on Concurrency Level 10'
+            sh 'qual-stress-monitoring/tests/stress_test.sh 1000 10 http://sp.int3.sonata-nfv.eu:8000/api/v1/prometheus/metrics'
+            echo 'Send 1000 requests on Concurrency Level 100'
+            sh 'qual-stress-monitoring/tests/stress_test.sh 1000 100 http://sp.int3.sonata-nfv.eu:8000/api/v1/prometheus/metrics'
        
        
        stage 'Notifications'
