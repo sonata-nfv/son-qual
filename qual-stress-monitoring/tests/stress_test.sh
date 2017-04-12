@@ -8,4 +8,4 @@ url=$3
 #-n requests     Number of requests to perform
 #-c concurrency  Number of multiple requests to make at a time
 
-ab -n $n -c $c -q $url >results.log
+ab -n $n -c $c -q $url >qual-stress-monitoring/results.log
