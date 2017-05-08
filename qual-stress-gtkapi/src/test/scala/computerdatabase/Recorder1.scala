@@ -9,12 +9,12 @@ import io.gatling.jdbc.Predef._
 class Recorder1 extends Simulation {
 
 	val httpProtocol = http
-		.baseURL("http://sp.int.alb.sonata-nfv.eu:32001")
+		.baseURL("http://sp.int.alb.sonata-nfv.eu")
 		.inferHtmlResources()
 		.acceptHeader("*/*")
 		.userAgentHeader("curl/7.35.0")
 
-    val uri1 = "http://sp.int.alb.sonata-nfv.eu:32001/api/v2/services"
+    val uri1 = "http://sp.int.alb.sonata-nfv.eu/api/v2/services"
 
 	val scn = scenario("RecordedSimulation1")
 		.exec(http("request_0")
