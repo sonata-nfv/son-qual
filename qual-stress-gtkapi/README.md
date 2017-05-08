@@ -1,12 +1,8 @@
-gatling-maven-plugin-demo
+qual-stress-gtkapi
 =========================
 
-Simple showcase of a maven project using the gatling-maven-plugin.
+Gatling test to stress the gatekeeper API.
 
-To test it out, simply execute the following command:
-
-    $mvn gatling:execute -Dgatling.simulationClass=computerdatabase.BasicSimulation
-
-or simply:
+To run the test, simply execute the following command:
 
     $mvn gatling:execute
