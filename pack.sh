@@ -13,6 +13,7 @@ git clone https://github.com/sonata-nfv/son-cli.git
 cd son-cli
 virtualenv -p /usr/bin/python3 venv
 source venv/bin/activate
+pip3 install flask
 pip3 install numpy
 pip3 install scipy
 pip3 install docker==2.0.2
