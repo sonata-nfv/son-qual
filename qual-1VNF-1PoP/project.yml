@@ -5,4 +5,4 @@ package:
   vendor: eu.sonata-nfv.package
   version: '0.1'
 descriptor_extension: "yml"
-version: '0.1'
+version: '0.5'
