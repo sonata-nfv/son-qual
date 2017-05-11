@@ -1,7 +1,6 @@
 ##
 ## This is the network service descriptor of the
-## SONATA demo example that comprises a virtual traffic
-## classifier (vTC)
+## SONATA qualification test 1VNF 1PoP
 ##
 ## @author Felipe Vicens
 ##
@@ -13,8 +12,8 @@ name: "sonata-demo-1"
 version: "0.1"
 author: "Felipe Vicens, Atos IT Solutions and Services Iberia"
 description: >
-  "The network service descriptor for the SONATA demo,
-   comprising a Virtual Traffic Classifier"
+  "The network service descriptor for the SONATA,
+   for qualification test 1VNF 1PoP"
 
 ##
 ## The various network functions this service
