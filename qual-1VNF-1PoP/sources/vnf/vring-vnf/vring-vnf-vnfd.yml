@@ -32,7 +32,7 @@ virtual_deployment_units:
     connection_points:
       - id: "vdu01:eth0"
         interface: "ipv4"
-        type: "internal"
+        type: "management"
       - id: "vdu01:eth1"
         interface: "ipv4"
         type: "internal"
