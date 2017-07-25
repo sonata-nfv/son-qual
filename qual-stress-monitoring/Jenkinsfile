@@ -31,8 +31,8 @@ node {
        
 
         stage 'Publish the artifact'
- +            archive (includes: '*.log')
-
+            archive (includes: '*.log')
+       
         stage 'Notifications'
             echo 'Sending mails'
 
