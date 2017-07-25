@@ -8,5 +8,7 @@ url=$3
 #-n requests     Number of requests to perform
 #-c concurrency  Number of multiple requests to make at a time
 
+
 ab -n $n -c $c -g $4.log -q $url >>results.log
+
 printf "%s" "$(<results.log)"
