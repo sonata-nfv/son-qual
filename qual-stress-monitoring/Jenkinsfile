@@ -29,8 +29,10 @@ node {
             echo 'Send 10000 requests on Concurrency Level 1000'
             sh 'qual-stress-monitoring/tests/post_stress_test.sh 10000 1000  http://sp.alb.sonata-nfv.eu:9091/metrics/job/stress'
        
+        stage 'Publish the artifact'
+            archive (includes: '*.log')
        
-       stage 'Notifications'
+        stage 'Notifications'
             echo 'Sending mails'
 
             mail body: 'project build successful',
