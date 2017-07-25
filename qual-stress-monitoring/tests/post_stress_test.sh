@@ -11,6 +11,3 @@ pwd
 echo "stress_metric 1.00" > data
 ab -p data -n $n -c $c -q $url >results.log
 printf "%s" "$(<results.log)"
-
-sudo rm data
-sudo rm results.log
