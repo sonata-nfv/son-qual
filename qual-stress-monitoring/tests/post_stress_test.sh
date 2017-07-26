@@ -14,6 +14,5 @@ echo "stress_metric 1.00" > data
 ab -p data -n $n -c $c -g $logf -q $url >res.out
 
 cat res.out >> results.log
-
 printf "%s" "$(<res.out)"
 

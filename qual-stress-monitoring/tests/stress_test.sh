@@ -13,5 +13,4 @@ url=$4
 ab -n $n -c $c -g $logf -q $url >res.out
 
 cat res.out >> results.log
-
 printf "%s" "$(<res.out)"
