@@ -10,6 +10,8 @@ url=$4
 #-c concurrency  Number of multiple requests to make at a time
 
 
-ab -n $n -c $c -g $logf -q $url >>results.log
+ab -n $n -c $c -g $logf -q $url >res.out
 
-printf "%s" "$(<results.log)"
+cat res.out >> results.log
+
+printf "%s" "$(<res.out)"
