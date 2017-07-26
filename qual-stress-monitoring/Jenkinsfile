@@ -11,6 +11,7 @@ node {
        stage 'Deploy'
             echo 'Install test Environment'
             sh 'qual-stress-monitoring/deploytestenv.sh'
+            sh 'rm results.log'
        stage 'Stress Mon Manager API '
             echo 'Send 1000 requests on Concurrency Level 10'
             sh 'qual-stress-monitoring/tests/stress_test.sh 1000 10 monMan10 http://sp.alb.sonata-nfv.eu:8000/api/v1/users'
