@@ -31,6 +31,7 @@ which son-package
 
 # service platform projects
 son-package --workspace test_ws --project qual-1VNF-1PoP -n qual-1VNF-1PoP
+son-package --workspace test_ws --project qual-2VNF-1PoP -n qual-2VNF-1PoP
 
 # leave venv
 deactivate
