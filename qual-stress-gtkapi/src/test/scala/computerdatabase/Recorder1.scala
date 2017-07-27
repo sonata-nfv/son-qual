@@ -20,6 +20,6 @@ class Recorder1 extends Simulation {
 		.exec(http("request_0")
 			.get("/admin/log"))
 
-	setUp(scn.inject(atOnceUsers(10))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1000))).protocols(httpProtocol)
 }
 
