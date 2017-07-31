@@ -21,9 +21,8 @@ class Recorder1 extends Simulation {
 
 	val scn = scenario("UserRegistration")
 		.exec(http("user_registration")
-			.post("/api/v1/register/user))
-			.header("Content-Type", "application/json")
-			// .body(RawFileBody("test-user.json")).asJSON
+			.post("/api/v1/register/user")
+			.header("Content-Type", "application/json")     //.body(RawFileBody("test-user.json")).asJSON
 			.body(StringBody(session =>
                     s"""
                        |{
@@ -50,7 +49,7 @@ class Recorder1 extends Simulation {
                        |    "groups": [],
                        |}
                       """.stripMargin)).asJSON
-                  .check(status.is(201))
+            .check(status.is(201)))
 
 	setUp(scn.inject(rampUsers(100) over (10 seconds))).protocols(httpProtocol)
 }
