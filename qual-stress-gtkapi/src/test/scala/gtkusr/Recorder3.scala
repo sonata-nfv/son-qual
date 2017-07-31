@@ -6,7 +6,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class Recorder1 extends Simulation {
+class Recorder3 extends Simulation {
 
     def userValue() = Random.nextInt(Integer.MAX_VALUE)
     def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
