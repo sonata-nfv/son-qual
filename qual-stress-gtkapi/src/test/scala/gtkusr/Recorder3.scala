@@ -48,7 +48,7 @@ class Recorder3 extends Simulation {
                        |    },
                        |    "realmRoles": [],
                        |    "clientRoles": {},
-                       |    "groups": [],
+                       |    "groups": []
                        |}
                       """.stripMargin)).asJSON
             .check(status.is(201)))
