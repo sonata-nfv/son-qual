@@ -8,7 +8,7 @@
 descriptor_version: "2.0"
 
 vendor: "eu.sonata-nfv.service-descriptor"
-name: "sonata-demo-1"
+name: "sonata-qual-2PoP-1VNF"
 version: "0.1"
 author: "Thomas Soenen, imec"
 description: >
@@ -20,13 +20,13 @@ description: >
 ## is composed of.
 ##
 network_functions:
-  - vnf_id: "vnf_vring"
+  - vnf_id: "vnf_vring_1"
     vnf_vendor: "eu.sonata-nfv"
     vnf_name: "vring-vnf"
     vnf_version: "0.1"
-  - vnf_id: "vnf_vtc"
+  - vnf_id: "vnf_vring_2"
     vnf_vendor: "eu.sonata-nfv"
-    vnf_name: "vtc-vnf"
+    vnf_name: "vring-vnf"
     vnf_version: "0.1"
 
 ##
@@ -52,24 +52,24 @@ virtual_links:
   - id: "mgmt"
     connectivity_type: "E-LAN"
     connection_points_reference:
-      - "vnf_vring:mgmt"
-      - "vnf_vtc:mgmt"
+      - "vnf_vring_1:mgmt"
+      - "vnf_vring_2:mgmt"
       - "mgmt"
-  - id: "input-2-vring"
+  - id: "input-2-vring_1"
     connectivity_type: "E-Line"
     connection_points_reference:
       - "input"
-      - "vnf_vring:input"
-  - id: "vtc-2-output"
+      - "vnf_vring_1:input"
+  - id: "vring_2-2-output"
     connectivity_type: "E-Line"
     connection_points_reference:
-      - "vnf_vtc:output"
+      - "vnf_vring_2:output"
       - "output"
-  - id: "vring-2-vtc"
+  - id: "vring-2-vring"
     connectivity_type: "E-Line"
     connection_points_reference:
-      - "vnf_vtc:input"
-      - "vnf_vring:output"
+      - "vnf_vring_2:input"
+      - "vnf_vring_1:output"
 ##
 ## The forwarding graphs.
 ##
@@ -85,13 +85,13 @@ forwarding_graphs:
         connection_points:
           - connection_point_ref: "input"
             position: 1
-          - connection_point_ref: "vnf_vring:input"
+          - connection_point_ref: "vnf_vring_1:input"
             position: 2
-          - connection_point_ref: "vnf_vring:output"
+          - connection_point_ref: "vnf_vring_1:output"
             position: 3
-          - connection_point_ref: "vnf_vtc:input"
+          - connection_point_ref: "vnf_vring_2:input"
             position: 4
-          - connection_point_ref: "vnf_vtc:output"
+          - connection_point_ref: "vnf_vring_2:output"
             position: 5
           - connection_point_ref: "output"
             position: 6
