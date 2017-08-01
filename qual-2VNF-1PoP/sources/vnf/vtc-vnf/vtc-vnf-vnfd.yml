@@ -9,7 +9,7 @@ description: >
 virtual_deployment_units:
   - id: "vdu01"
     description: "VNFC for the vTC"
-    vm_image: "eu.sonata-nfv_sonata-vtc_vdu01_qual"
+    vm_image: "eu.sonata-nfv_sonata-vring_vdu01"
     vm_image_format: "qcow2"
     resource_requirements:
       cpu:
