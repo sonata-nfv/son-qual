@@ -6,6 +6,50 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
-class Recorder1 extends Simulation {
+class MicroserviceRegistration extends Simulation {
 
+    def clientValue() = Random.nextInt(Integer.MAX_VALUE)
+    def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
+
+	val httpProtocol = http
+		.baseURL("http://sp.int3.sonata-nfv.eu:5600")
+		.inferHtmlResources()
+		.acceptHeader("*/*")
+		.userAgentHeader("curl/7.35.0")
+
+    val uri1 = "http://sp.int3.sonata-nfv.eu:5600/api/v1/register/service"
+
+	val scn = scenario("MicroserviceRegistration")
+		.exec(http("microservice_registration")
+			.post("/api/v1/register/service")
+			.header("Content-Type", "application/json")
+			.body(StringBody(session =>
+                    s"""
+                       |{
+                       |    "clientId": "${clientValue()}",
+                       |    "surrogateAuthRequired": false,
+                       |    "enabled": true,
+                       |    "clientAuthenticatorType": "client-secret",
+                       |    "secret": "1234",
+                       |    "redirectUris": [
+                       |        "/auth/catalogue"
+                       |    ],
+                       |    "webOrigins": [],
+                       |    "notBefore": 0,
+                       |    "bearerOnly": false,
+                       |    "clientRoles": {},
+                       |    "consentRequired": false,
+                       |    "standardFlowEnabled": true,
+                       |    "implicitFlowEnabled": false,
+                       |    "directAccessGrantsEnabled": true,
+                       |    "serviceAccountsEnabled": true,
+                       |    "publicClient": false,
+                       |    "frontchannelLogout": false,
+                       |    "protocol": "openid-connect",
+                       |    "fullScopeAllowed": false
+                       |}
+                      """.stripMargin)).asJSON
+            .check(status.is(201)))
+
+	setUp(scn.inject(rampUsers(100) over (10 seconds))).protocols(httpProtocol)
 }
