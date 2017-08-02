@@ -6,10 +6,12 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
+import scala.util.Random
+
 class MicroserviceRegistration extends Simulation {
 
     def clientValue() = Random.nextInt(Integer.MAX_VALUE)
-    def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
+    //def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
 
 	val httpProtocol = http
 		.baseURL("http://sp.int3.sonata-nfv.eu:5600")
