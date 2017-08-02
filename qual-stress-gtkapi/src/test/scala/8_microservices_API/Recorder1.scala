@@ -53,5 +53,5 @@ class MicroserviceRegistration extends Simulation {
                       """.stripMargin)).asJSON
             .check(status.is(201)))
 
-	setUp(scn.inject(rampUsers(100) over (10 seconds))).protocols(httpProtocol)
+	setUp(scn.inject(rampUsers(25) over (10 seconds))).protocols(httpProtocol)
 }
