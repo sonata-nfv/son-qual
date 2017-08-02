@@ -11,7 +11,7 @@ import scala.util.Random
 class MicroserviceRegistration extends Simulation {
 
     def clientValue() = Random.nextInt(Integer.MAX_VALUE)
-    //def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
+    def redirectValue() = Random.alphanumeric.take(20).mkString
 
 	val httpProtocol = http
 		.baseURL("http://sp.int3.sonata-nfv.eu:5600")
@@ -34,7 +34,7 @@ class MicroserviceRegistration extends Simulation {
                        |    "clientAuthenticatorType": "client-secret",
                        |    "secret": "1234",
                        |    "redirectUris": [
-                       |        "/auth/catalogue"
+                       |        "/auth/${redirectValue()}"
                        |    ],
                        |    "webOrigins": [],
                        |    "notBefore": 0,
