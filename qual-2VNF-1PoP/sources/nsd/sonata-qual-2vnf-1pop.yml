@@ -22,7 +22,7 @@ description: >
 network_functions:
   - vnf_id: "vnf_vring_1"
     vnf_vendor: "eu.sonata-nfv"
-    vnf_name: "vring-vnf-1"
+    vnf_name: "vring-vnf"
     vnf_version: "0.1"
   - vnf_id: "vnf_vring_2"
     vnf_vendor: "eu.sonata-nfv"
