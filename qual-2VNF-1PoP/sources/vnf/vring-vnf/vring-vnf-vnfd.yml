@@ -1,6 +1,6 @@
 descriptor_version: "vnfd-schema-01"
 vendor: "eu.sonata-nfv"
-name: "vring-vnf-1"
+name: "vring-vnf"
 version: "0.1"
 author: "Felipe Vicens, ATOS"
 description: "Virtual ring (vRING) descriptor file"
