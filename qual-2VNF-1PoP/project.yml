@@ -1,7 +1,7 @@
 package:
   description: "SONATA RING with traffic classifier service for qualification environment"
   maintainer: "Thomas Soenen, imec, thomas.soenen@ugent.be"
-  name: sonata-ring-vtc-service
+  name: sonata-vring-vring-service
   vendor: eu.sonata-nfv.package
   version: '0.1'
 descriptor_extension: "yml"

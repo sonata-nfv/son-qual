@@ -8,7 +8,7 @@
 descriptor_version: "2.0"
 
 vendor: "eu.sonata-nfv.service-descriptor"
-name: "sonata-qual-2PoP-1VNF"
+name: "sonata-qual-2pop-1vnf"
 version: "0.1"
 author: "Thomas Soenen, imec"
 description: >
