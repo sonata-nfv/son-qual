@@ -8,7 +8,7 @@ description: "Virtual ring (vRING) descriptor file"
 virtual_deployment_units:
   - id: "vdu01"
     description: "VNFC for the vRING"
-    vm_image: "eu.sonata-nfv_sonata-vring_vdu01"
+    vm_image: "eu.sonata-nfv_vring-vnf_0.1_vdu01"
     vm_image_format: "qcow2"
     resource_requirements:
       cpu:
