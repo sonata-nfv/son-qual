@@ -1,4 +1,4 @@
-package computerdatabase
+package usersAPI
 
 import scala.concurrent.duration._
 
@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 import scala.util.Random
 
-class Recorder3 extends Simulation {
+class UserRegistration extends Simulation {
 
     def userValue() = Random.nextInt(Integer.MAX_VALUE)
     def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
