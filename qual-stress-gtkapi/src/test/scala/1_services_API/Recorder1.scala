@@ -6,6 +6,8 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
+import scala.util.parsing.json._
+
 class GetServices1 extends Simulation {
 
     val httpProtocol = http
@@ -48,9 +50,13 @@ class GetServices1 extends Simulation {
 
 	val scn = scenario("GetServices1")
 	    .exec(loginRequest)
-		.exec(http("services_1")
-		    .header("Authorization", "bearer ${accessToken}")
-			.get("/api/v2/services"))
+		.exec(
+		    http("services_1")
+			.get("/api/v2/services")
+			.headers(Map(
+                "Authorization" -> "bearer ${accessToken}"
+                )
+			)
 
 	setUp
 	    (scn.inject(
