@@ -57,6 +57,7 @@ class GetServices1 extends Simulation {
                 "Authorization" -> "bearer ${accessToken}"
                 )
 			)
+        )
 
 	setUp
 	    (scn.inject(
