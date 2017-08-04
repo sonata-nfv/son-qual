@@ -15,7 +15,7 @@ class GetServices1 extends Simulation {
 		.userAgentHeader("curl/7.35.0")
 
 	val loginRequest = tryMax(1) {
-                .exec(
+                exec(
                     http("requesting_access_token")
                         .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
                         .headers(Map(
@@ -47,6 +47,7 @@ class GetServices1 extends Simulation {
 	val scn = scenario("GetServices1")
 	    .exec(loginRequest)
 		.exec(http("services_1")
+		    .header("Authorization", "bearer ${accessToken}")
 			.get("/api/v2/services"))
 
 	setUp
