@@ -7,6 +7,7 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
 import scala.util.parsing.json._
+import general._
 
 class GetServices1 extends Simulation {
 
@@ -25,12 +26,13 @@ class GetServices1 extends Simulation {
                             "Content-Type" -> "application/json; charset=UTF-8"
                             )
                         )
-                        .body(StringBody(
-                            Util.jsonFromMap(Map(
-                                "username" -> "user01",
-                                "password" -> "1234"
-                            ))
-                        ))
+                        .body(StringBody(session =>
+                                            s"""
+                                               |{
+                                               |    "username" -> "user01",
+                                               |    "password" -> "1234"
+                                               |}
+                                              """.stripMargin)).asJSON
                         .check(status.is(200))
                         //.check(bodyString.saveAs("login_response"))
                         .check(
@@ -58,50 +60,6 @@ class GetServices1 extends Simulation {
                 )
 			)
         )
-
-	setUp
-	    (scn.inject(
-	        nothingFor(4 seconds),
-	        atOnceUsers(1000))
-	    )
-	.protocols(httpProtocol)
-}
-
-class GetServices2 extends Simulation {
-
-    val httpProtocol = http
-		.baseURL("http://sp.int3.sonata-nfv.eu:5300")
-		.inferHtmlResources()
-		.acceptHeader("*/*")
-		.userAgentHeader("curl/7.35.0")
-
-    val uri1 = "http://sp.int3.sonata-nfv.eu:5300/services"
-
-	val scn = scenario("GetServices2")
-		.exec(http("services_2")
-			.get("/services"))
-
-	setUp
-	    (scn.inject(
-	        nothingFor(4 seconds),
-	        atOnceUsers(1000))
-	    )
-	.protocols(httpProtocol)
-}
-
-class GetServices3 extends Simulation {
-
-    val httpProtocol = http
-		.baseURL("http://sp.int3.sonata-nfv.eu:4002")
-		.inferHtmlResources()
-		.acceptHeader("*/*")
-		.userAgentHeader("curl/7.35.0")
-
-    val uri1 = "http://sp.int3.sonata-nfv.eu:4002/catalogues/api/v2/network-services"
-
-	val scn = scenario("GetServices3")
-		.exec(http("services_3")
-			.get("/catalogues/api/v2/network-services"))
 
 	setUp
 	    (scn.inject(
