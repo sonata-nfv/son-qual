@@ -26,7 +26,7 @@ class GetServices1 extends Simulation {
                         .body(StringBody(
                             Util.jsonFromMap(Map(
                                 "username" -> "user01",
-                                "password" -> "1234",
+                                "password" -> "1234"
                             ))
                         ))
                         .check(status.is(200))
@@ -35,12 +35,14 @@ class GetServices1 extends Simulation {
                               jsonPath("$.access_token").saveAs("access_token")
                             )
                 )
-                .exec(session => {
-                  val accessToken = session.get("access_token").asOption[String]
-                  println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
-                  session
+                .exec(
+                    session => {
+                    val accessToken = session.get("access_token").asOption[String]
+                    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
+                    session
                 })
-    }
+
+    }.exitHereIfFailed
 
     val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/services"
 
