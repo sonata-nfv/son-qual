@@ -19,39 +19,39 @@ class GetServices1 extends Simulation {
     val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/services"
 
 	val scn = scenario("GetServices1")
-	    .exec(
-             http("requesting_access_token")
-                 .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
-                 .headers(Map(
-                     "Accept" -> "application/json, */*; q=0.01",
-                     "Content-Type" -> "application/json"
-                     )
-                 )
-                 .body(StringBody(session =>
-                                     s"""
-                                        |{
-                                        |    "username" -> "user01",
-                                        |    "password" -> "1234"
-                                        |}
-                                       """.stripMargin)).asJSON
-                 .check(status.is(200))
-                 .check(
-                       jsonPath("$.access_token").saveAs("access_token")
-                     )
-         )
-         //.exec(
-         //    session => {
-         //    val accessToken = session.get("access_token").asOption[String]
-         //    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
-         //    session
-         //})
+	    //.exec(
+        //     http("requesting_access_token")
+        //        .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
+        //         .headers(Map(
+        //             "Accept" -> "application/json, */*; q=0.01",
+        //             "Content-Type" -> "application/json"
+        //             )
+        //         )
+        //         .body(StringBody(session =>
+        //                             s"""
+        //                                |{
+        //                               |    "username" -> "user01",
+        //                                |    "password" -> "1234"
+        //                                |}
+        //                               """.stripMargin)).asJSON
+        //         .check(status.is(200))
+        //         .check(
+        //               jsonPath("$.access_token").saveAs("access_token")
+        //             )
+        // )
+        //.exec(
+        //    session => {
+        //    val accessToken = session.get("access_token").asOption[String]
+        //    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
+        //    session
+        //})
 		.exec(
 		    http("services_1")
 			.get("/api/v2/services")
-			.headers(Map(
-                "Authorization" -> "bearer ${accessToken}"
-                )
-			)
+		//	.headers(Map(
+        //        "Authorization" -> "bearer ${accessToken}"
+        //        )
+		//	)
         )
 
 	setUp
