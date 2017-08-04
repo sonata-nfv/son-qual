@@ -16,34 +16,6 @@ class GetServices1 extends Simulation {
 		.acceptHeader("*/*")
 		.userAgentHeader("curl/7.35.0")
 
-	val loginRequest = exec(
-                        http("requesting_access_token")
-                            .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
-                            .headers(Map(
-                                "Accept" -> "application/json, */*; q=0.01",
-                                "Content-Type" -> "application/json; charset=UTF-8"
-                                )
-                            )
-                            .body(StringBody(session =>
-                                                s"""
-                                                   |{
-                                                   |    "username" -> "user01",
-                                                   |    "password" -> "1234"
-                                                   |}
-                                                  """.stripMargin)).asJSON
-                            .check(status.is(200))
-                            //.check(bodyString.saveAs("login_response"))
-                            .check(
-                                  jsonPath("$.access_token").saveAs("access_token")
-                                )
-                    )
-                    .exec(
-                        session => {
-                        val accessToken = session.get("access_token").asOption[String]
-                        println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
-                        session
-                    })
-
     val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/services"
 
 	val scn = scenario("GetServices1")
@@ -52,7 +24,7 @@ class GetServices1 extends Simulation {
                  .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
                  .headers(Map(
                      "Accept" -> "application/json, */*; q=0.01",
-                     "Content-Type" -> "application/json; charset=UTF-8"
+                     "Content-Type" -> "application/json"
                      )
                  )
                  .body(StringBody(session =>
@@ -63,17 +35,16 @@ class GetServices1 extends Simulation {
                                         |}
                                        """.stripMargin)).asJSON
                  .check(status.is(200))
-                 //.check(bodyString.saveAs("login_response"))
                  .check(
                        jsonPath("$.access_token").saveAs("access_token")
                      )
          )
-         .exec(
-             session => {
-             val accessToken = session.get("access_token").asOption[String]
-             println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
-             session
-         })
+         //.exec(
+         //    session => {
+         //    val accessToken = session.get("access_token").asOption[String]
+         //    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
+         //    session
+         //})
 		.exec(
 		    http("services_1")
 			.get("/api/v2/services")
