@@ -39,7 +39,6 @@ class MicroserviceRegistration extends Simulation {
                        |    "webOrigins": [],
                        |    "notBefore": 0,
                        |    "bearerOnly": false,
-                       |    "clientRoles": {},
                        |    "consentRequired": false,
                        |    "standardFlowEnabled": true,
                        |    "implicitFlowEnabled": false,
