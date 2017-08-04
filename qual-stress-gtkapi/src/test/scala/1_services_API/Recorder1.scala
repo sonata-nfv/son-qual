@@ -7,7 +7,6 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
 import scala.util.parsing.json._
-import general._
 
 class GetServices1 extends Simulation {
 
