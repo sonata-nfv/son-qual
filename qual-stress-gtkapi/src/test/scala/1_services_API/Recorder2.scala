@@ -20,8 +20,7 @@ class GetServices2 extends Simulation {
 		.exec(http("services_2")
 			.get("/services"))
 
-	setUp
-	    (scn.inject(
+	setUp(scn.inject(
 	        nothingFor(4 seconds),
 	        atOnceUsers(1000))
 	    )
