@@ -73,7 +73,7 @@ virtual_links:
     connectivity_type: "E-Line"
     connection_points_reference:
       - "input"
-      - "vnf-1:input"
+      - "vnf_1:input"
 ##
 ## The forwarding graphs.
 ##

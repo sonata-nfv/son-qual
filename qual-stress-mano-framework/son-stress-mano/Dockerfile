@@ -27,6 +27,9 @@ ENV PLUGIN_BASE son-stress-mano
 # Configuration
 ENV broker_host amqp://guest:guest@broker:5672/%2F
 ENV broker_exchange son-kernel
+ENV amount_of_vnfs [1,2,5,10]
+ENV reproduce 5
+ENV amount_of_requests [1,2,5]
 
 # add generic project files
 ADD son-mano-base /son-mano-base
