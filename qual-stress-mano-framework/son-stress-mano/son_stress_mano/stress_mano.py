@@ -68,6 +68,18 @@ class StressMano(ManoBasePlugin):
         des = "This is the stress mano plugin"
 
         self.results = {}
+        self.vnfs_to_test = list(map(int, os.environ.get("amount_of_vnfs")[1:-1].split(',')))
+        LOG.info(str(self.vnfs_to_test))
+        self.reproduce = int(os.environ.get("reproduce"))
+        self.amount_of_requests = list(map(int, os.environ.get("amount_of_requests")[1:-1].split(',')))
+
+        self.playbook = []
+        self.resultbook = []
+
+        for vnf in self.vnfs_to_test:
+            for amount in self.amount_of_requests:
+                self.playbook.append({'vnf': vnf, 'rep': self.reproduce, 'amount': amount, 'start_times': [], 'stop_times': []})
+
 
         super(self.__class__, self).__init__(version=ver,
                                              description=des,
@@ -94,8 +106,9 @@ class StressMano(ManoBasePlugin):
         # self.manoconn.subscribe(self.placement_request, topic)
 
         # subscribe to create and terminate topics
-        self.manoconn.subscribe(self.create_message, GK_CREATE)
-        self.manoconn.subscribe(self.term_message, GK_TERM)
+        self.manoconn.subscribe(self.create_message_received, GK_CREATE)
+        self.manoconn.subscribe(self.term_message_received, GK_TERM)
+        self.manoconn.subscribe(self.test, 'infrastructure.function.deploy')
 
         LOG.info("Subscribed to topic: ")
 
@@ -114,7 +127,7 @@ class StressMano(ManoBasePlugin):
         super(self.__class__, self).on_lifecycle_start(ch, mthd, prop, msg)
         LOG.info("Stress Mano plugin started and operational.")
 
-        self.start_testing()
+        self.start_next_test()
 
     def deregister(self):
         """
@@ -134,21 +147,43 @@ class StressMano(ManoBasePlugin):
         super(self.__class__, self).on_registration_ok()
         LOG.debug("Received registration ok event.")
 
-    def create_message(self, ch, method, prop, payload):
+    def test(self, ch, method, prop, payload):
+        LOG.info("IA DEPLOY")
+        LOG.info(payload)
 
+    def create_message_received(self, ch, method, prop, payload):
+
+        timestamp = time.time()
         if prop.app_id != self.name:
             message = yaml.load(payload)
-            print(payload)
+            LOG.info(payload)
             if message['status'] == 'READY':
-                pass
+                LOG.info("request finished.")
+                self.playbook[0]['stop_times'].append(timestamp)
 
-    def term_message(self, ch, method, prop, payload):
+                if len(self.playbook[0]['stop_times']) == self.playbook[0]['amount']:
+                    LOG.info('all tests in sequence done, starting next set.')
+                    self.resultbook.append(self.playbook.pop(0))
+                    self.start_next_test()                
+
+    def term_message_received(self, ch, method, prop, payload):
         pass
 
-    def start_testing(self):
-        payload = self.create_request(vnf=3)
-        corr_id = str(uuid.uuid4())
-        self.manoconn.notify(GK_CREATE, yaml.dump(payload), correlation_id=corr_id)
+    def start_next_test(self):
+
+        if len(self.playbook) > 0:
+            setup = self.playbook[0]
+            LOG.info('new test starting: amount of vnfs: ' + str(setup['vnf']) + ', times repeated: ' + str(setup['rep']) + ', amount of requests: ' + str(setup['amount']))
+            for i in range(setup['amount']):
+                payload = self.create_request(vnf=setup['vnf'])
+                corr_id = str(uuid.uuid4())
+                timestamp = time.time()
+                self.manoconn.notify(GK_CREATE, yaml.dump(payload), correlation_id=corr_id)
+                self.playbook[0]['start_times'].append(timestamp)
+                LOG.info("request sent.")
+        else:
+            LOG.info("All tests are finished")
+            LOG.info(str(self.resultbook))
 
     def create_request(self, vnf=2):
 
@@ -157,14 +192,17 @@ class StressMano(ManoBasePlugin):
         nsd = yaml.load(open('descriptors/nsd.yml'))
 
         net_func = []
-        for i in range(1, vnf + 1):
-            new_vnf = {}
-            new_vnf['vnf_id'] = "vnf_" + str(i)
-            new_vnf['vnf_vendor'] = "eu.sonata-nfv"
-            new_vnf["vnf_name"] = "vnf-" + str(i)
-            new_vnf["vnf_version"] = "0.1"
 
-        nsd["network_function"] = net_func
+        for i in range(vnf):
+            LOG.info('adding vnf to nsd')
+            new_vnf = {}
+            new_vnf['vnf_id'] = "vnf_" + str(i+1)
+            new_vnf['vnf_vendor'] = "eu.sonata-nfv"
+            new_vnf["vnf_name"] = "vnf-" + str(i+1)
+            new_vnf["vnf_version"] = "0.1"
+            net_func.append(new_vnf)
+
+        nsd["network_functions"] = net_func
         nsd['uuid'] = str(uuid.uuid4())
 
         new_vl = []
@@ -187,7 +225,6 @@ class StressMano(ManoBasePlugin):
 
         LOG.info(yaml.dump(request))
         return request
-
 
 
 def main():
