@@ -76,9 +76,13 @@ class StressMano(ManoBasePlugin):
         self.playbook = []
         self.resultbook = []
 
+        self.thrd = pool.ThreadPoolExecutor(max_workers=100)
+
+        counter = 1
         for vnf in self.vnfs_to_test:
             for amount in self.amount_of_requests:
-                self.playbook.append({'vnf': vnf, 'rep': self.reproduce, 'amount': amount, 'start_times': [], 'stop_times': []})
+                self.playbook.append({'vnf': vnf, 'testnumber': counter, 'rep': self.reproduce, 'amount': amount, 'times': []})
+                counter = counter + 1
 
 
         super(self.__class__, self).__init__(version=ver,
@@ -108,7 +112,6 @@ class StressMano(ManoBasePlugin):
         # subscribe to create and terminate topics
         self.manoconn.subscribe(self.create_message_received, GK_CREATE)
         self.manoconn.subscribe(self.term_message_received, GK_TERM)
-        self.manoconn.subscribe(self.test, 'infrastructure.function.deploy')
 
         LOG.info("Subscribed to topic: ")
 
@@ -147,31 +150,117 @@ class StressMano(ManoBasePlugin):
         super(self.__class__, self).on_registration_ok()
         LOG.debug("Received registration ok event.")
 
-    def test(self, ch, method, prop, payload):
-        LOG.info("IA DEPLOY")
-        LOG.info(payload)
-
     def create_message_received(self, ch, method, prop, payload):
 
         timestamp = time.time()
         if prop.app_id != self.name:
             message = yaml.load(payload)
-            LOG.info(payload)
-            if message['status'] == 'READY':
-                LOG.info("request finished.")
-                self.playbook[0]['stop_times'].append(timestamp)
+            LOG.info("Message received with status: " + message['status'])
+            corr_id = prop.correlation_id
+            for request in self.playbook[0]['times']:
+                if request['corr_id'] == corr_id:
+                    if message['status'] == 'ERROR':
+                        request['failed'] = True
+                        request['finished'] = True
+                        completed = self.count_completed(self.playbook[0]['times'])
+                        LOG.info(str(completed) + ' out of ' + str(self.playbook[0]['amount']) + " requests completed.")
+                    if message['status'] == 'READY':
+                        request['stop'] = timestamp
+                        request['finished'] = True
+                        request['diff'] = request['stop'] - request['start']
+                        completed = self.count_completed(self.playbook[0]['times'])
+                        LOG.info(str(completed) + ' out of ' + str(self.playbook[0]['amount']) + " requests completed.")
 
-                if len(self.playbook[0]['stop_times']) == self.playbook[0]['amount']:
-                    LOG.info('all tests in sequence done, starting next set.')
-                    self.resultbook.append(self.playbook.pop(0))
-                    self.start_next_test()                
+                    completed = self.count_completed(self.playbook[0]['times'])
+
+                    if completed == self.playbook[0]['amount']:
+                        self.killing_allowed = False
+                        successful = self.count_successful(self.playbook[0]['times'])
+                        self.playbook[0]['successful'] = successful
+                        LOG.info(str(successful) + ' out of ' + str(self.playbook[0]['amount']) + " requests successful.")
+                        average = self.calc_average(self.playbook[0]['times'])
+                        self.playbook[0]['average'] = average
+                        LOG.info(str(average) + ' is the average time per request.')
+                        self.resultbook.append(self.playbook.pop(0))
+                        LOG.info('all tests in sequence done, starting next set.')
+                        self.start_next_test()
+                    break
+
+    def count_completed(self, times_list):
+
+        completed = 0
+        for request in times_list:
+            if request['finished']:
+                completed = completed + 1
+
+        return completed
+
+    def count_successful(self, times_list):
+
+        successful = 0
+        for request in times_list:
+            if not request['failed']:
+                successful = successful + 1
+
+        return successful
+
+    def calc_average(self, times_list):
+
+        sum_time = 0.0
+        for request in times_list:
+            if not request['failed']:
+                sum_time = sum_time + request['diff']
+
+        successful = self.count_successful(times_list)
+
+        if successful == 0:
+            return None
+
+        return sum_time / successful
 
     def term_message_received(self, ch, method, prop, payload):
         pass
 
+    def start_kill_counter(self, timeout, testnumber):
+
+        for i in range(timeout):
+            time.sleep(10)
+            if len(self.playbook) == 0:
+                return
+            if self.playbook[0]["testnumber"] != testnumber:
+                LOG.info("Exiting...")
+                return
+
+        if len(self.playbook) > 0:
+            if self.playbook[0]["testnumber"] == testnumber:
+                if self.killing_allowed:
+                    for request in self.playbook[0]['times']:
+                        if not request['finished']:
+                            LOG.info("Request failed to finish")
+                            request['failed'] = True
+                            request['finished'] = True
+
+                    completed = self.count_completed(self.playbook[0]['times'])
+
+                    LOG.info(str(completed) + ' out of ' + str(self.playbook[0]['amount']) + " requests completed.")
+
+                    if completed == self.playbook[0]['amount']:
+                        LOG.info('all tests in sequence done, starting next set.')
+                        successful = self.count_successful(self.playbook[0]['times'])
+                        self.playbook[0]['successful'] = successful
+                        LOG.info(str(successful) + ' out of ' + str(self.playbook[0]['amount']) + " requests successful.")
+                        average = self.calc_average(self.playbook[0]['times'])
+                        self.playbook[0]['average'] = average
+                        LOG.info(str(average) + ' is the average time per request.')
+                        self.resultbook.append(self.playbook.pop(0))
+                        self.start_next_test()
+
+                    self.killing_allowed = False
+
     def start_next_test(self):
 
         if len(self.playbook) > 0:
+            time.sleep(15)
             setup = self.playbook[0]
             LOG.info('new test starting: amount of vnfs: ' + str(setup['vnf']) + ', times repeated: ' + str(setup['rep']) + ', amount of requests: ' + str(setup['amount']))
             for i in range(setup['amount']):
@@ -179,11 +268,39 @@ class StressMano(ManoBasePlugin):
                 corr_id = str(uuid.uuid4())
                 timestamp = time.time()
                 self.manoconn.notify(GK_CREATE, yaml.dump(payload), correlation_id=corr_id)
-                self.playbook[0]['start_times'].append(timestamp)
+                new_entry = {}
+                new_entry['corr_id'] = corr_id
+                new_entry['start'] = timestamp
+                new_entry['failed'] = False
+                new_entry['finished'] = False
+                new_entry['stop'] = None
+                new_entry['diff'] = None
+                self.playbook[0]['times'].append(new_entry)
                 LOG.info("request sent.")
+
+            LOG.info("Start a counter to catch all the requests that are never finished")
+            self.killing_allowed = True
+            task = self.thrd.submit(self.start_kill_counter, 50, setup["testnumber"])
+
         else:
             LOG.info("All tests are finished")
             LOG.info(str(self.resultbook))
+            for entry in self.resultbook:
+                LOG.info('RESULT: amount of vnfs: ' + str(entry['vnf']) + ', amount of requests: ' + str(entry['amount']) + ', amount completed: ' + str(entry['successful']) + ', average time per request: ' + str(entry["average"]))
+            output = []
+            for entry in self.resultbook:
+                new_entry = {}
+                new_entry['amount_of_vnfs'] = entry['vnf']
+                new_entry['amount_of_requests'] = entry['amount']
+                new_entry['amount_successful'] = entry['successful']
+                new_entry['average_time_per_request'] = entry['average'] 
+                output.append(new_entry)
+
+            yaml_file = yaml.dump(output)
+            text_file = open("output.yml", "w")
+            text_file.write(yaml_file)
+            text_file.close()
+            LOG.info("File outputted as output.yml, experiment completed.")
 
     def create_request(self, vnf=2):
 
@@ -194,7 +311,6 @@ class StressMano(ManoBasePlugin):
         net_func = []
 
         for i in range(vnf):
-            LOG.info('adding vnf to nsd')
             new_vnf = {}
             new_vnf['vnf_id'] = "vnf_" + str(i+1)
             new_vnf['vnf_vendor'] = "eu.sonata-nfv"
@@ -223,7 +339,6 @@ class StressMano(ManoBasePlugin):
             vnfd['name'] = 'vnf-' + str(i)
             request['VNFD' + str(i)] = vnfd
 
-        LOG.info(yaml.dump(request))
         return request
 
 
