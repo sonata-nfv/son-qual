@@ -1,0 +1,107 @@
+##
+## This is the network service descriptor of the
+## SONATA qualification test 1VNF 1PoP
+##
+## @author Felipe Vicens
+##
+---
+descriptor_version: "2.0"
+
+vendor: "eu.sonata-nfv.service-descriptor"
+name: "sonata-qual-2pop-1vnf"
+version: "0.1"
+author: "Thomas Soenen, imec"
+description: >
+  "The network service descriptor for the SONATA,
+   for qualification test 2VNF 1PoP"
+
+servicespecific_specific_managers:
+  - id: "sonssmQual2PopPlacement"
+    description: "SSM to do placement in 2PoP qual env"
+    image: "sonatanfv/ssm-css"
+    options:
+      - key: "type"
+        value: "place"
+
+
+##
+## The various network functions this service
+## is composed of.
+##
+network_functions:
+  - vnf_id: "vnf_vring_1"
+    vnf_vendor: "eu.sonata-nfv"
+    vnf_name: "vring-vnf"
+    vnf_version: "0.1"
+  - vnf_id: "vnf_vring_2"
+    vnf_vendor: "eu.sonata-nfv"
+    vnf_name: "vring-vnf-2"
+    vnf_version: "0.2"
+
+##
+## The NS connection points to the
+## outside world.
+##
+connection_points:
+  - id: "mgmt"
+    interface: "ipv4"
+    type: "management"
+  - id: "input"
+    interface: "ipv4"
+    type: "external"
+  - id: "output"
+    interface: "ipv4"
+    type: "external"
+
+##
+## The virtual links that interconnect
+## the different connections points.
+##
+virtual_links:
+  - id: "mgmt"
+    connectivity_type: "E-LAN"
+    connection_points_reference:
+      - "vnf_vring_1:mgmt"
+      - "vnf_vring_2:mgmt"
+      - "mgmt"
+  - id: "input-2-vring_1"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "input"
+      - "vnf_vring_1:input"
+  - id: "vring_2-2-output"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vnf_vring_2:output"
+      - "output"
+  - id: "vring-2-vring"
+    connectivity_type: "E-Line"
+    connection_points_reference:
+      - "vnf_vring_2:input"
+      - "vnf_vring_1:output"
+##
+## The forwarding graphs.
+##
+forwarding_graphs:
+  - fg_id: "ns:fg01"
+    number_of_endpoints: 2
+    number_of_virtual_links: 3
+    constituent_vnfs:
+      - "vnf_vring"
+    network_forwarding_paths:
+      - fp_id: "ns:fg01:fp01"
+        policy: "none"
+        connection_points:
+          - connection_point_ref: "input"
+            position: 1
+          - connection_point_ref: "vnf_vring_1:input"
+            position: 2
+          - connection_point_ref: "vnf_vring_1:output"
+            position: 3
+          - connection_point_ref: "vnf_vring_2:input"
+            position: 4
+          - connection_point_ref: "vnf_vring_2:output"
+            position: 5
+          - connection_point_ref: "output"
+            position: 6
+
