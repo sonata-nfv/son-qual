@@ -35,13 +35,12 @@ LOG = logging.getLogger("ssm-placement-1")
 LOG.setLevel(logging.DEBUG)
 logging.getLogger("son-mano-base:messaging").setLevel(logging.DEBUG)
 
-
 class PlacementSSM(sonSMbase):
     def __init__(self):
 
         self.specific_manager_type = 'ssm'
-        self.service_name = 'default'
-        self.specific_manager_name = 'placement'
+        self.service_name = 'Qual2Pop'
+        self.specific_manager_name = 'Placement'
         self.id_number = '1'
 
         self.version = 'v0.1'
