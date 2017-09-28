@@ -16,7 +16,7 @@ description: >
    for qualification test 2VNF 1PoP"
 
 servicespecific_specific_managers:
-  - id: "sonssmQual2PopPlacement"
+  - id: "sonssmQual2PopPlacement1"
     description: "SSM to do placement in 2PoP qual env"
     image: "sonatanfv/ssm-css"
     options:
