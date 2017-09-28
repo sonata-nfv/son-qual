@@ -5,16 +5,16 @@ This is the service that will be used in our 2VNF 1 PoP qualification test.
 Service chain: 
 
 ```
-              +-------------------+        +--------------------+
-  IN          |                   |        |                    |         OUT
-      +------->       vRING       +-------->         vTC        +------->
-              |                   |        |                    |
-              +-------------------+        +--------------------+
+              +-------------------+        +--------------------+       +--------------------+
+  IN          |                   |        |                    |       |                    |    OUT
+      +------->       vRING       +-------->       vRING        +------->       vRING        +---->
+              |                   |        |                    |       |                    |
+              +-------------------+        +--------------------+       +--------------------+
 ```
 
 ## vRING VNF
 
-The firewall VNF consists of one part:
+The vRING consists of one part:
 
 1. Open vSwitch-based data plane
 
@@ -24,5 +24,3 @@ ovs-ofctl add-flow br-ring in_port=1,actions=output:2
 ovs-ofctl add-flow br-ring in_port=2,actions=output:1
 ```
 
-## vTC VNF
-The vTC VNF is a traffic classifier.

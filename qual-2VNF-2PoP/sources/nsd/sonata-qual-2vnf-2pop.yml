@@ -15,7 +15,13 @@ description: >
   "The network service descriptor for the SONATA,
    for qualification test 2VNF 1PoP"
 
-
+servicespecific_specific_managers:
+  - id: "sonssmQual2PopPlacement"
+    description: "SSM to do placement in 2PoP qual env"
+    image: "sonatanfv/ssm-css"
+    options:
+      - key: "type"
+        value: "place"
 
 
 ##
