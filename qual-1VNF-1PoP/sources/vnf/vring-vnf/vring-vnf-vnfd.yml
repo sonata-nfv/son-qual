@@ -61,13 +61,13 @@ virtual_links:
     dhcp: False
 
 connection_points:
-- id: "vnf:mgmt"
+- id: "mgmt"
   interface: "ipv4"
   type: "management"
-- id: "vnf:input"
+- id: "input"
   interface: "ipv4"
   type: "external"
-- id: "vnf:output"
+- id: "output"
   interface: "ipv4"
   type: "external"
 
