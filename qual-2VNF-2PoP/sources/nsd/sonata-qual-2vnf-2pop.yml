@@ -18,7 +18,7 @@ description: >
 service_specific_managers:
   - id: "sonssmQual2PopPlacement1"
     description: "SSM to do placement in 2PoP qual env"
-    image: "sonatanfv/ssm-css"
+    image: "sonatanfv/qual-2vnf-2pop-ssm-place"
     options:
       - key: "type"
         value: "place"
