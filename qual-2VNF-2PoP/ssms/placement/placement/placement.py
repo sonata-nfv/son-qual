@@ -108,23 +108,20 @@ class PlacementSSM(sonSMbase):
         LOG.info("Mapping algorithm started.")
         mapping = {}
 
+        for pop in topology:
+            if vim['vim_city'] == 'Athens'
+                athens_pop_uuid=vim['vim_uuid']
+            if vim['vim_city'] == 'Aveiro'
+                aveiro_pop_uuid=vim['vim_uuid']
+
         for vnfd in functions:
-            needed_cpu = vnfd['virtual_deployment_units'][0]['resource_requirements']['cpu']['vcpus']
-            needed_mem = vnfd['virtual_deployment_units'][0]['resource_requirements']['memory']['size']
-            needed_sto = vnfd['virtual_deployment_units'][0]['resource_requirements']['storage']['size']
+            if vnfd['name']=='vring-vnf'
+                mapping[vnfd['instance_uuid']] = {}
+                mapping[vnfd['instance_uuid']]['vim'] = aveiro_pop_uuid;
+            if vnfd['name']=='vring-vnf-2'
+                mapping[vnfd['instance_uuid']] = {}
+                mapping[vnfd['instance_uuid']]['vim'] = athens_pop_uuid;
 
-            for vim in topology:
-                cpu_req = needed_cpu <= (vim['core_total'] - vim['core_used'])
-                mem_req = needed_mem <= (vim['memory_total'] - vim['memory_used'])
-
-                if cpu_req and mem_req:
-                    print('VNF ' + vnfd['instance_uuid'] + ' mapped on VIM ' + vim['vim_uuid'])
-                    mapping[vnfd['instance_uuid']] = {}
-                    mapping[vnfd['instance_uuid']]['vim'] = vim['vim_uuid']
-                    vim['core_used'] = vim['core_used'] + needed_cpu
-                    vim['memory_used'] = vim['memory_used'] + needed_mem
-                    break
-        
         # Check if all VNFs have been mapped
         if len(mapping.keys()) == len(functions):
             LOG.info("Mapping succeeded: " + str(mapping))
