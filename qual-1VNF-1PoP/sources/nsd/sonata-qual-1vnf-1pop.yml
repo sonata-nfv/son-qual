@@ -54,7 +54,7 @@ virtual_links:
     connectivity_type: "E-Line"
     connection_points_reference:
       - "input"
-      - "vnf_ring:input"
+      - "vnf_vring:input"
   - id: "vring-2-output"
     connectivity_type: "E-Line"
     connection_points_reference:
