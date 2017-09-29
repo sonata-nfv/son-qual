@@ -21,7 +21,7 @@ service_specific_managers:
     image: "sonatanfv/qual-2vnf-2pop-ssm-place"
     options:
       - key: "type"
-        value: "place"
+        value: "placement"
 
 
 ##
