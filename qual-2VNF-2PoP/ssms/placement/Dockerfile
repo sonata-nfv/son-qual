@@ -28,21 +28,17 @@ ENV mongo_port 27017
 ENV broker_host amqp://guest:guest@broker:5672/%2F
 ENV broker_exchange son-kernel
 
-RUN apt-get clean \
-    && apt-get update \
-    && apt-get install -y git 
+ADD son-sm/son-mano-framework/son-mano-base /son-mano-base
+ADD son-sm/son-sm-template /son-sm-template
 
-# clone son-sm repo to install dependencies
-RUN git clone --recursive https://github.com/sonata-nfv/son-sm.git
+WORKDIR /son-mano-base
+Run python setup.py install
 
-# install dependencies (sonsmbase and sonmanobase)
-WORKDIR /son-sm/son-mano-framework/son-mano-base
+WORKDIR /son-sm-template
 RUN python setup.py install
 
-WORKDIR /son-sm/son-sm-template
-RUN python setup.py install
+ADD qual-2VNF-2PoP/ssms/placement /placement
 
-ADD ssms/placement /placement
 WORKDIR /placement
 RUN python setup.py develop
 
