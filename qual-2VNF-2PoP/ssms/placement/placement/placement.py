@@ -109,16 +109,16 @@ class PlacementSSM(sonSMbase):
         mapping = {}
 
         for pop in topology:
-            if vim['vim_city'] == 'Athens'
+            if vim['vim_city'] == 'Athens':
                 athens_pop_uuid=vim['vim_uuid']
-            if vim['vim_city'] == 'Aveiro'
+            if vim['vim_city'] == 'Aveiro':
                 aveiro_pop_uuid=vim['vim_uuid']
 
         for vnfd in functions:
-            if vnfd['name']=='vring-vnf'
+            if vnfd['name']=='vring-vnf':
                 mapping[vnfd['instance_uuid']] = {}
                 mapping[vnfd['instance_uuid']]['vim'] = aveiro_pop_uuid;
-            if vnfd['name']=='vring-vnf-2'
+            if vnfd['name']=='vring-vnf-2':
                 mapping[vnfd['instance_uuid']] = {}
                 mapping[vnfd['instance_uuid']]['vim'] = athens_pop_uuid;
 
