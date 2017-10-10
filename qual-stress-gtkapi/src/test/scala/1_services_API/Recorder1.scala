@@ -30,7 +30,7 @@ class GetServices1 extends Simulation {
                  .body(StringBody(session =>
                                      s"""
                                         |{
-                                       |    "username" -> "user01",
+                                        |    "username" -> "user01",
                                         |    "password" -> "1234"
                                         |}
                                        """.stripMargin)).asJSON
@@ -54,5 +54,5 @@ class GetServices1 extends Simulation {
 		)
         )
 
-	setUp(scn.inject(atOnceUsers(1000))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }
