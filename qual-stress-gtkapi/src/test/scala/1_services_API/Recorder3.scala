@@ -21,7 +21,7 @@ class GetServices3 extends Simulation {
 			.get("/catalogues/api/v2/network-services"))
 
 	setUp(scn.inject(
-	        nothingFor(4 seconds),
+	        //nothingFor(4 seconds),
 	        atOnceUsers(1000))
 	    )
 	.protocols(httpProtocol)

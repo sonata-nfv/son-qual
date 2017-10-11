@@ -55,5 +55,5 @@ class GetServices1 extends Simulation {
 			.headers(sessionHeaders)
 		)
 
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	setUp(scn.inject(atOnceUsers(1000))).protocols(httpProtocol)
 }
