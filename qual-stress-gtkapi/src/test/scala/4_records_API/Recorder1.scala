@@ -6,6 +6,8 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
+import scala.util.parsing.json._
+
 class GetRecords1 extends Simulation {
 
     val httpProtocol = http
@@ -14,11 +16,35 @@ class GetRecords1 extends Simulation {
 		.acceptHeader("*/*")
 		.userAgentHeader("curl/7.35.0")
 
-    val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/records"
+    val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/records/services"
+
+    val sessionHeaders = Map("Authorization" -> "Bearer ${accessToken}",
+                                    "Content-Type" -> "application/json")
 
 	val scn = scenario("GetRecords1")
+	    .exec(
+            http("requesting_access_token")
+            .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
+            .headers(Map(
+                "Accept" -> "application/json, */*; q=0.01",
+                "Content-Type" -> "application/json"
+                )
+            )
+            //.body(RawFileBody("test-credentials.txt"))
+            .body(StringBody(session =>
+                                s"""
+                                   |{
+                                   |    "username":"user01",
+                                   |    "password":"1234"
+                                   |}
+                                """.stripMargin)).asJSON
+            .check(status.is(200))
+            .check(jsonPath("$..access_token").saveAs("accessToken"))
+        )
 		.exec(http("records_1")
-			.get("/api/v2/records"))
+			.get("/api/v2/records/services")
+			.headers(sessionHeaders)
+		)
 
 	setUp(scn.inject(atOnceUsers(1000))).protocols(httpProtocol)
 }
