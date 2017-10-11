@@ -27,11 +27,12 @@ class GetServices1 extends Simulation {
                      "Content-Type" -> "application/json"
                      )
                  )
+                 //.body(RawFileBody("test-credentials.txt"))
                  .body(StringBody(session =>
                                      s"""
                                         |{
-                                        |    "username" -> "user01",
-                                        |    "password" -> "1234"
+                                        |    "username":"user01",
+                                        |    "password":"1234"
                                         |}
                                        """.stripMargin)).asJSON
                  .check(status.is(200))
