@@ -18,7 +18,18 @@ class GetServices1 extends Simulation {
 
     val uri1 = "http://sp.int3.sonata-nfv.eu:32001/api/v2/services"
 
-    val accessToken = scenario("Authentication")
+    val sessionHeaders = Map("Authorization" -> "Bearer ${accessToken}",
+                                   "Content-Type" -> "application/json")
+
+    //val accessToken = scenario("Authentication")
+
+	val scn = scenario("GetServices1")
+        //.exec(
+        //   session => {
+        //    val accessToken = session.get("access_token").asOption[String]
+        //    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
+        //    session
+        //})
         .exec(
             http("requesting_access_token")
             .post("http://sp.int3.sonata-nfv.eu:32001/api/v2/sessions")
@@ -36,19 +47,8 @@ class GetServices1 extends Simulation {
                                    |}
                                 """.stripMargin)).asJSON
             .check(status.is(200))
-            .check(jsonPath("$.access_token").saveAs("accessToken"))
+            .check(jsonPath("$..access_token").saveAs("accessToken"))
         )
-
-    val sessionHeaders = Map("Authorization" -> "Bearer ${accessToken}",
-                               "Content-Type" -> "application/json")
-
-	val scn = scenario("GetServices1")
-        //.exec(
-        //   session => {
-        //    val accessToken = session.get("access_token").asOption[String]
-        //    println(accessToken.getOrElse("COULD NOT FIND TOKEN"))
-        //    session
-        //})
 		.exec(
 		    http("services_1")
 			.get("/api/v2/services")
