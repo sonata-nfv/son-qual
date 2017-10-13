@@ -49,6 +49,7 @@ class GetServices1 extends Simulation {
             .check(status.is(200))
             .check(jsonPath("$..access_token").saveAs("accessToken"))
         )
+        .pause(5)
 		.exec(
 		    http("services_1")
 			.get("/api/v2/services")

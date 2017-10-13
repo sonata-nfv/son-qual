@@ -16,9 +16,13 @@ class GetServices3 extends Simulation {
 
     val uri1 = "http://sp.int3.sonata-nfv.eu:4002/catalogues/api/v2/network-services"
 
+    val testHeaders = Map("Content-Type" -> "application/json")
+
 	val scn = scenario("GetServices3")
 		.exec(http("services_3")
-			.get("/catalogues/api/v2/network-services"))
+			.get("/catalogues/api/v2/network-services")
+			.headers(testHeaders)
+			)
 
 	setUp(scn.inject(
 	        nothingFor(5 seconds),
