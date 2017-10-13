@@ -41,6 +41,7 @@ class GetFunctions1 extends Simulation {
             .check(status.is(200))
             .check(jsonPath("$..access_token").saveAs("accessToken"))
         )
+        .pause(5)
 		.exec(http("functions_1")
 			.get("/api/v2/functions")
 			.headers(sessionHeaders)

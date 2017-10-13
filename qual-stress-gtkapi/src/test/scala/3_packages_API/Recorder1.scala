@@ -41,6 +41,7 @@ class GetPackages1 extends Simulation {
             .check(status.is(200))
             .check(jsonPath("$..access_token").saveAs("accessToken"))
         )
+        .pause(5)
 		.exec(http("packages_1")
 			.get("/api/v2/packages")
 			.headers(sessionHeaders)
