@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 import scala.util.Random
 
-class UserRegistration extends Simulation {
+class UserRegistration2 extends Simulation {
 
     def userValue() = Random.nextInt(Integer.MAX_VALUE)
     def emailValue() = Random.alphanumeric.take(20).mkString + "@test.com"
@@ -21,8 +21,8 @@ class UserRegistration extends Simulation {
 
     val uri1 = "http://sp.int3.sonata-nfv.eu:5600/api/v1/register/user"
 
-	val scn = scenario("UserRegistration")
-		.exec(http("user_registration")
+	val scn = scenario("UserRegistration2")
+		.exec(http("user_registration2")
 			.post("/api/v1/register/user")
 			.header("Content-Type", "application/json")     //.body(RawFileBody("test-user.json")).asJSON
 			.body(StringBody(session =>
