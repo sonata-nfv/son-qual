@@ -1,4 +1,4 @@
-package requestsAPI
+package recordsAPI
 
 import scala.concurrent.duration._
 
