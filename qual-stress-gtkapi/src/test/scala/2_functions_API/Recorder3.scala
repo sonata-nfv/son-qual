@@ -1,4 +1,4 @@
-package servicesAPI
+package functionsAPI
 
 import scala.concurrent.duration._
 

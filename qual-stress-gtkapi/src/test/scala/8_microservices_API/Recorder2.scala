@@ -8,7 +8,7 @@ import io.gatling.jdbc.Predef._
 
 import scala.util.Random
 
-class MicroserviceRegistration extends Simulation {
+class MicroserviceRegistration2 extends Simulation {
 
     def clientValue() = Random.nextInt(Integer.MAX_VALUE)
     def redirectValue() = Random.alphanumeric.take(20).mkString
@@ -21,8 +21,8 @@ class MicroserviceRegistration extends Simulation {
 
     val uri1 = "http://sp.int3.sonata-nfv.eu:5600/api/v1/register/service"
 
-	val scn = scenario("MicroserviceRegistration")
-		.exec(http("microservice_registration")
+	val scn = scenario("MicroserviceRegistration2")
+		.exec(http("microservice_registration2")
 			.post("/api/v1/register/service")
 			.header("Content-Type", "application/json")
 			.body(StringBody(session =>
