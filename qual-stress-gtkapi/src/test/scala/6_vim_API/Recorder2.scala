@@ -20,7 +20,7 @@ import scala.util.parsing.json._
 
 	val scn = scenario("GetVims2")
 		.exec(http("vims_2")
-			.get("/vim/compute-resources"")
+			.get("/vim/compute-resources")
 		)
 
 	setUp(scn.inject(atOnceUsers(1000))).protocols(httpProtocol)
