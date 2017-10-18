@@ -49,8 +49,8 @@ class MicroserviceRegistration2 extends Simulation {
                        |    "protocol": "openid-connect",
                        |    "fullScopeAllowed": false
                        |}
-                      """.stripMargin)).asJSON
+                    """.stripMargin)).asJSON
             .check(status.is(201)))
 
-	setUp(scn.inject(rampUsers(25) over (10 seconds))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(25) over (10 seconds))).protocols(httpProtocol)
 }
