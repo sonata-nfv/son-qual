@@ -53,5 +53,5 @@ class MicroserviceRegistration2 extends Simulation {
             //.check(status.is(201)))
             .check(status.is(401)))
 
-	setUp(scn.inject(nothingFor(5 seconds),rampUsers(25) over (10 seconds))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (10 seconds))).protocols(httpProtocol)
 }
