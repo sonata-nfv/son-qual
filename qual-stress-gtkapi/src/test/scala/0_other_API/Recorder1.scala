@@ -20,6 +20,7 @@ class UMLog extends Simulation {
 		.exec(http("um_log")
 			.get("/admin/log"))
 
-	setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	//setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (5 seconds))).protocols(httpProtocol)
 }
 

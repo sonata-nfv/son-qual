@@ -20,6 +20,7 @@ class UMPublicKey extends Simulation {
 		.exec(http("um_get_public_key")
 			.get("/api/v1/public-key"))
 
-	setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(100))).protocols(httpProtocol)
+	//setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(100))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (5 seconds))).protocols(httpProtocol)
 }
 
