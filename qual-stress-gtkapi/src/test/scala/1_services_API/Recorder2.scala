@@ -22,7 +22,8 @@ class GetServices2 extends Simulation {
 
 	setUp(scn.inject(
 	        nothingFor(5 seconds),
-	        atOnceUsers(1000))
+	        //atOnceUsers(1000))
+	        rampUsers(100) over (5 seconds)))
 	    )
 	.protocols(httpProtocol)
 }
