@@ -50,7 +50,8 @@ class MicroserviceRegistration2 extends Simulation {
                        |    "fullScopeAllowed": false
                        |}
                     """.stripMargin)).asJSON
-            .check(status.is(201)))
+            //.check(status.is(201)))
+            .check(status.is(401)))
 
 	setUp(scn.inject(nothingFor(5 seconds),rampUsers(25) over (10 seconds))).protocols(httpProtocol)
 }

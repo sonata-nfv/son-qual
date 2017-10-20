@@ -20,6 +20,7 @@ class GKPublicKey extends Simulation {
 		.exec(http("gk_get_public_key")
 			.get("/api/v2/micro-services/public-key"))
 
-	setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	//setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (5 seconds))).protocols(httpProtocol)
 }
 
