@@ -20,5 +20,6 @@ class GetRequests2 extends Simulation {
 		.exec(http("requests_2")
 			.get("/requests"))
 
-	setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	//setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (5 seconds))).protocols(httpProtocol)
 }

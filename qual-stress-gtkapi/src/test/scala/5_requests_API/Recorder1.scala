@@ -47,5 +47,6 @@ class GetRequests1 extends Simulation {
             .headers(sessionHeaders)
         )
 
-	setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	//setUp(scn.inject(nothingFor(5 seconds),atOnceUsers(1000))).protocols(httpProtocol)
+	setUp(scn.inject(nothingFor(5 seconds),rampUsers(100) over (5 seconds))).protocols(httpProtocol)
 }
