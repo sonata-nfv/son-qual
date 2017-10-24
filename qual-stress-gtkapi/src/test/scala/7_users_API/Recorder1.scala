@@ -33,7 +33,7 @@ class UserRegistration1 extends Simulation {
                        |    "lastName": "test",
                        |    "email": "${emailValue()}",
                        |    "password": "${userValue()}",
-                       |    "user_type": ["developer","customer"]
+                       |    "user_type": "developer"
                        |}
                     """.stripMargin)).asJSON
             .check(status.is(201)))
